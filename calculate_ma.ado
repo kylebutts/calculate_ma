@@ -1,3 +1,42 @@
+*! version 0.1
+
+
+capture program drop calculate_ma
+program define calculate_ma
+	version 15
+	syntax varlist(min=1 max=1 numeric), tau(string) [theta(string) GENerate(string)]
+	
+	/* Check options */
+	confirm number `theta'
+
+	/* default for theta */
+	if "`theta'" == "" {
+		display "Setting theta to 5"
+		local theta = 5
+	} 
+	
+	confirm matrix `tau'
+	confirm name `generate'
+	confirm numeric variable `varlist'
+
+	
+	/* Load Data into mata variables */
+	mata: st_view(Y, .,"`varlist'")
+	mata: tau = st_matrix("`tau'")
+	mata: theta = `theta'
+	
+	/* Calculate Market Access */
+	mata: ma = calculate_ma(Y, tau, theta)
+	
+	/* Store results */
+	mata: st_store(., st_addvar("float", "`generate'"), ma)
+end
+
+
+
+
+
+capture mata mata drop calculate_ma() normalize()
 mata:
 
 /* -----------------------------------------------------------------------------
@@ -18,9 +57,10 @@ Description:
 real vector calculate_ma(real vector Y, real matrix tau, real scalar theta) {
 	
 	real vector ma, ma_new, matemp
-	real scalar Tol, N
+	real scalar Tol, delta, N
 	
 	Tol = 0.1
+	delta = 1
 	N = length(Y')
 	matemp = J(N,1,1)
 	
@@ -28,42 +68,31 @@ real vector calculate_ma(real vector Y, real matrix tau, real scalar theta) {
 	ma_new = rowsum( (tau :^ -theta) :* (J(N, 1, 1) * Y'))
 	
 	/* Fixed point iteration */
-	while(sqrt(sum((ma_new-matemp):^2)) > Tol) {
+	while( delta > Tol) {
         matemp = normalize(ma_new)
         
 		ma_new = rowsum( (tau :^ -theta) :* ( (J(N, 1, 1) * matemp'):^ -1) :* (J(N,1,1) * Y'))
         
         ma_new = normalize(ma_new)
+		
+		delta = sqrt(sum((ma_new-matemp):^2))
     }
 	
 	ma = ma_new * 1000
 	
+	/* returns */
+	st_matrix("r(delta)", delta)
+	st_matrix("r(ma)", ma)
+	
 	return(ma)
 }
 
-/* helper function to normalize vector by L^2 norm */
+	
+	
+
+/* Helper function to normalize vector by L^2 norm */
 real vector normalize(real vector v) {
 	return(v / sqrt(sum(v :^2)))
 }
-
-end
-
-
-
-mata:
-
-/* Simple test example */
-Y = (1, 2, 1, 1, 1)'
-tau = (
-	1.0, 1.1, 1.1, 1.1, 1.1 \ 
-	1.1, 1.0, 1.1, 1.1, 1.1 \ 
-	1.1, 1.1, 1.0, 1.1, 1.1 \ 
-	1.1, 1.1, 1.1, 1.0, 1.1 \ 
-	1.1, 1.1, 1.1, 1.1, 1.0
-)
-theta = 5
-
-ma = calculate_ma(Y, tau, theta)
-ma
 
 end
