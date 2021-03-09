@@ -7,7 +7,6 @@ program define calculate_ma
 	syntax varlist(min=1 max=1 numeric), tau(string) [theta(string) GENerate(string)]
 	
 	/* Check options */
-	confirm number `theta'
 
 	/* default for theta */
 	if "`theta'" == "" {
@@ -21,6 +20,12 @@ program define calculate_ma
 
 	
 	/* Load Data into mata variables */
+	disp "Calculating Market Access using"
+	disp "Market Size: `varlist'"
+	disp "tau: `tau'"
+	disp "theta: `theta'"
+	
+	mata: Y = .
 	mata: st_view(Y, .,"`varlist'")
 	mata: tau = st_matrix("`tau'")
 	mata: theta = `theta'
@@ -29,7 +34,7 @@ program define calculate_ma
 	mata: ma = calculate_ma(Y, tau, theta)
 	
 	/* Store results */
-	mata: st_store(., st_addvar("float", "`generate'"), ma)
+	mata: (void) st_store(., st_addvar("float", "`generate'"), ma)
 end
 
 

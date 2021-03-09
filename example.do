@@ -1,5 +1,6 @@
 /* Example of calculate_ma.ado */
 
+do calculate_ma.ado
 
 clear
 set obs 5
