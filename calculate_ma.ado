@@ -19,12 +19,19 @@ program define calculate_ma
 	confirm numeric variable `varlist'
 
 	
-	/* Load Data into mata variables */
+	/* Display Information */
+	local divider = "-"*40 
+	disp "`divider'"
 	disp "Calculating Market Access using"
 	disp "Market Size: `varlist'"
 	disp "tau: `tau'"
 	disp "theta: `theta'"
+	disp "`divider'"
+	disp "Results stored in `generate'"
+	disp "`divider'"
 	
+	
+	/* Load Data into mata variables */
 	mata: Y = .
 	mata: st_view(Y, .,"`varlist'")
 	mata: tau = st_matrix("`tau'")
