@@ -1,6 +1,6 @@
 * Example of calculate_ma.ado --------------------------------------------------
 
-do calculate_ma.ado
+do ado/calculate_ma.ado
 
 clear
 set obs 5
@@ -20,8 +20,6 @@ calculate_ma Y, tau("tau") theta(8) generate("ma_simple") formula("simple")
 
 
 * Example of gen_tau -----------------------------------------------------------
-
-do gen_tau.ado
 
 clear
 * four points exaclty 1km away from the first point
@@ -45,10 +43,10 @@ matrix list tau
 * Example using real data ------------------------------------------------------
 
 set matsize 4000
-insheet using trial_data/Tau2010cost1.csv, clear
+insheet using data/Tau2010cost1.csv, clear
 mkmat *, matrix(tau)
 
-insheet using trial_data/Y2010.csv, clear
+insheet using data/Y2010.csv, clear
 
 rename v1 Y
 
