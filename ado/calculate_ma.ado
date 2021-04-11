@@ -4,39 +4,49 @@
 capture program drop calculate_ma
 program define calculate_ma
 	version 13
-	syntax varlist(min=1 max=1 numeric), tau(string) formula(string) [theta(string) GENerate(string)]
+	syntax varlist(min=1 max=1 numeric), tau(string) formula(string) GENerate(string) [theta(real 0) tradecost(string)]
 	
 	/* Check options */
-
-	/* default for theta */
-	if "`theta'" == "" {
-		display "Setting theta to 5"
-		local theta = 5
-	} 
-	
 	confirm matrix `tau'
 	confirm name `generate'
+	confirm variable `varlist'
 	confirm numeric variable `varlist'
 
-	/* 
-	if(!("`formula'" == "income" | "`formula'" == "population")) {
-		disp "formula must be either income or population"
+	/* Check formula */
+	if(!("`formula'" == "income" | "`formula'" == "population" | "`formula'" == "basic")) {
+		disp "formula must be either income, population, or basic. See {stata help calculate_ma:calculate_ma} for details on formula"
 		exit
 	}
-	*/
+
+	/* Set defauls for theta */
+	if("`tradecost'" == "traveltime" & "`theta'" == "0") {
+		/* Page 782 of Jaworski and Kitchens (2019) */
+		local theta 8
+	}
+	if("`tradecost'" == "distance" & "`theta'" == "0") {
+		/* Page 19 of Bartelme (2018 Working Paper) */
+		local theta 1.01
+	}
+	if("`tradecost'" == "tau" & "`theta'" == "0") {
+		/* Table 3.5 from Head and Mayer (2012) */
+		local theta 5.13
+	}
+	if("`tradecost'" == "" & "`theta'" == "0") {
+		disp "Warning: you did not specify the option of tradecost so the elasticity of trade cost, theta, is set to 5. See {stata help calculate_ma:calculate_ma} for details on tradecost"
+		local theta 5
+	}
 	
 	
 	/* Display Information */
-	local divider = "-"*40 
-	disp "`divider'"
+	disp "{hline 59}"
 	disp "Calculating Market Access using"
-	disp "Market Size: `varlist'"
-	disp "tau: `tau'"
-	disp "theta: `theta'"
-	disp "formula: `formula'"
-	disp "`divider'"
-	disp "Results stored in `generate'"
-	disp "`divider'"
+	disp "Market Size: {col 18}{result:`varlist'}"
+	disp "tau: {col 18}{result:`tau'}"
+	disp "theta: {col 18}{result:`theta'}"
+	disp "formula: {col 18}{result:`formula'}"
+	disp "{hline 59}"
+	disp "Results stored in {result:`generate'}"
+	disp "{hline 59}"
 	
 	
 	/* Load Data into mata variables */
@@ -47,7 +57,7 @@ program define calculate_ma
 	mata: formula = "`formula'"
 	
 	/* Calculate Market Access */
-	mata: calculate_ma(Y, tau, theta, formula)
+	mata: ma = calculate_ma(Y, tau, theta, formula)
 	
 	/* Store results */
 	mata: (void) st_store(., st_addvar("float", "`generate'"), ma)
