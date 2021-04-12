@@ -4,19 +4,9 @@
 capture program drop gen_tau
 program define gen_tau
 	version 15
-	syntax, LATitude(string) LONgitude(string) matname(string) elasticity(string) [dist_cutoff(string)]
+	syntax, LATitude(string) LONgitude(string) GENerate(string) [elasticity(real -1), dist_cutoff(real -1)]
 	
 	/* Check options */
-
-	/* default for dist_cutoff */
-	if "`dist_cutoff'" == "" {
-		display "No minimum distance threshold"
-		local dist_cutoff = -1
-	} 
-	
-	confirm number `dist_cutoff'
-	
-	confirm number `elasticity'
 	confirm numeric variable `latitude'
 	confirm numeric variable `longitude'
 
@@ -29,14 +19,12 @@ program define gen_tau
 	mata: dist_cutoff = `dist_cutoff'
 	mata: elasticity = `elasticity'
 	
-	/* Calculate Market Access */
+	/* Calculate Tau */
 	mata: tau = gen_tau(lat, lon, elasticity, dist_cutoff)
 	
 	/* Store results */
-	mata: st_matrix("`matname'", tau)
+	mata: st_matrix("`generate'", tau)
 end
-
-
 
 
 
@@ -104,11 +92,11 @@ real matrix gen_tau(real vector lat, real vector lon, real scalar elasticity, re
 	
 end
 
-
+/*
 mata:
 
 /* https://rosettacode.org/wiki/Haversine_formula#python */
-/* shoould be ~2887 km */
+/* should be ~2887 km */
 lat = (36.12, 33.94)
 lon = (-86.67, -118.40)
 gen_tau(lat, lon, -1, -1)
@@ -116,9 +104,14 @@ gen_tau(lat, lon, -1, -1)
 
 lat = (39.9522, 39.9612062665079, 39.9521994093929, 39.9431937194577, 39.9521994093929)'
 lon = (-75.1642, -75.1642000000000, -75.1524977114628, -75.1642000000000, -75.1759022885372)'
+
+/* No Cutoff */
 gen_tau(lat, lon, -1, -1)
+
+/* Cutoff */
 gen_tau(lat, lon, -1,  20037.217)
 
 
 
 end
+*/

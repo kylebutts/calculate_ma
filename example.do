@@ -21,6 +21,8 @@ calculate_ma Y, tau("tau") theta(8) generate("ma_simple") formula("simple")
 
 * Example of gen_tau -----------------------------------------------------------
 
+do ado/gen_tau.ado
+
 clear
 * four points exaclty 1km away from the first point
 input lat lon
@@ -31,11 +33,9 @@ input lat lon
 39.9521994093929  -75.1759022885372
 end
 
-gen_tau, lat("lat") lon("lon") matname("tau") elasticity(-1)
+gen_tau, lat("lat") lon("lon") generate("tau")
 
 matrix list tau
-
-
 
 
 
