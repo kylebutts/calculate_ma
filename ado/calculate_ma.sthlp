@@ -37,7 +37,7 @@
 {title:Description}
 
 {pstd}
-{bf:calculate_ma} takes a vector of market size, a matrix of iceberg trade costs, and an elasticity of trade costs, theta, and returns the computed market access.
+{bf:calculate_ma} takes a vector of market size, a matrix of iceberg trade costs, and an elasticity of trade costs, theta, and returns the computed market access. Market access is a summary statistic that measures unit i's access to all other market places. It is a weighted sum of other units market size where the weights are decreasing in trade costs. A unit has a larger market access value when it has low trade costs with large markets.
 
 
 {marker formulae}
