@@ -5,13 +5,13 @@
 {title:Generate Tau Matrix from Lat/Long}
 
 {pstd}
-{bf:gen_tau} - This function takes lat/long and creates an nxn matrix of distances between points (using the Haversine Formula).
+{bf:gen_dist_mat} - This function takes lat/long and creates an nxn matrix of distances between points (using the Haversine Formula).
 
 {marker syntax}{...}
 {title:Syntax}
 
 {phang2}
-{cmd:gen_tau} {cmd:,} {cmdab:lat:itude(}{it:varname}{cmd:)} {cmdab:lon:gitude(}{it:varname}{cmd:)} {cmdab:gen:erate(}{it:string}{cmd:)} [{it:options}]
+{cmd:gen_dist_mat} {cmd:,} {cmdab:lat:itude(}{it:varname}{cmd:)} {cmdab:lon:gitude(}{it:varname}{cmd:)} {cmdab:gen:erate(}{it:string}{cmd:)} [{it:options}]
 
 {synoptset 20 tabbed}{...}
 {synopthdr}
@@ -30,7 +30,7 @@
 {title:Description}
 
 {pstd}
-{bf:gen_tau} takes {opt lat:itude} and {opt lon:gitude} of a set of points and returns the matrix of distances between them using the Haversine formula. It will store this matrix by the name given by {opt gen:erate}.
+{bf:gen_dist_mat} takes {opt lat:itude} and {opt lon:gitude} of a set of points and returns the matrix of distances between them using the Haversine formula. It will store this matrix by the name given by {opt gen:erate}.
 
 {title:Example}
 
@@ -44,7 +44,7 @@
         {cmd:  39.9431937194577  -75.1642000000000}
         {cmd:  39.9521994093929  -75.1759022885372}
         {cmd:  end}
-        {cmd:. gen_tau, lat("lat") lon("lon") gen("tau") elasticity(-1)}
+        {cmd:. gen_dist_mat, lat("lat") lon("lon") gen("tau") elasticity(-1)}
         {cmd:. matrix list tau}
 
 
