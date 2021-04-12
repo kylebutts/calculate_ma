@@ -32,8 +32,8 @@ program define calculate_ma
 		local theta 5.13
 	}
 	if("`tradecost'" == "" & "`theta'" == "0") {
-		disp "Warning: you did not specify the option of tradecost so the elasticity of trade cost, theta, is set to 5. See {stata help calculate_ma:calculate_ma} for details on tradecost"
-		local theta 5
+		disp "Warning: you did not specify the option of tradecost so the elasticity of trade cost, theta, is set to 5.13. See {stata help calculate_ma:calculate_ma} for details on tradecost"
+		local theta 5.13
 	}
 	
 	

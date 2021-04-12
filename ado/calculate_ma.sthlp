@@ -9,16 +9,14 @@
 {pstd}
 {bf:calculate_ma} - This function takes a matrix of trade costs, {it:tau}, and a vector of market size, {it:Y}, and creates a new variable that contains market access. 
 
-{help calculate_ma##formulae}
-
 
 {marker syntax}{...}
 {title:Syntax}
 
 {phang2}
-{cmd:calculate_ma} {it:Y} [{cmd:,} {it:options}]
+{cmd:calculate_ma} {it:Y}{cmd:,} {cmdab:tau(}{it:matname}{cmd:)} {cmdab:formula(}{it:string}{cmd:)} {cmdab:gen:erate(}{it:newvar}{cmd:)} [{it:options}]
 
-{phang3}where {it:Y} is a measure of market size. This {p_end}
+{phang3}where {it:Y} is a measure of market size. {p_end}
 
 
 {synoptset 20 tabbed}{...}
@@ -26,9 +24,9 @@
 {synoptline}
 {syntab:Options}
 {synopt :{opt tau(matname)}}string containing name of stata matrix of iceberg trade costs{p_end}
-{synopt :{opt theta(#)}}measure of elasticity of trade with respect to trade costs. See {help calculate_ma##theta:Theta} for details on which elasticity to use. Defaults to 5.{p_end}
 {synopt :{opt formula(string)}}which formula to use, either "income", "population", or "basic". See {help calculate_ma##formulae:Formulae} for details on options.{p_end}
 {synopt :{opt gen:erate(newvar)}}name to store the created market access variable{p_end}
+{synopt :{opt theta(#)}}measure of elasticity of trade with respect to trade costs. See {help calculate_ma##theta:Theta} for details on which elasticity to use. Defaults to 5.13.{p_end}
 {synoptline}
 {p2colreset}{...}
 
