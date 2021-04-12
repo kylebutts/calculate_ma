@@ -34,7 +34,7 @@
 
 {title:Example}
 
-    Example of calculating market access
+    Example of calculating distance matrix
         {cmd:. clear}
         {cmd:. /* four points exaclty 1km away from the first point */}
         {cmd:  input lat lon}
